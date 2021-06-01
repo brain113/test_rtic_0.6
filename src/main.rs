@@ -45,6 +45,8 @@ mod app {
         printer::spawn_after(Milliseconds(2_000_u32), 3).unwrap();
         printer::spawn_after(Milliseconds(1_000_u32), 2).unwrap();
 
+        let _now = mono2.try_now();
+
         // (init::LateResources {}, init::Monotonics(mono2))
         (init::LateResources {}, init::Monotonics(mono2))
     }

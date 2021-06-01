@@ -3,21 +3,20 @@
 
 use panic_rtt_target as _;
 
-#[rtic::app(device = stm32l4xx_hal::pac, dispatchers = [USART1, USART2])]
+#[rtic::app(device = stm32f3xx_hal::pac, dispatchers = [TIM20_BRK, TIM20_UP, TIM20_TRG_COM])]
 mod app {
     use dwt_systick_monotonic::DwtSystick;
     use rtic::time::duration::*;
     use rtt_target::{rprintln, rtt_init_print};
-    use stm32l4xx_hal::prelude::*;
+    use stm32f3xx_hal::prelude::*;
 
     #[monotonic(binds = SysTick, default = true)]
-    type DwtMono = DwtSystick<80_000_000>;
+    type DwtMono = DwtSystick<8_000_000>;
 
     #[init]
     fn init(cx: init::Context) -> (init::LateResources, init::Monotonics) {
         let mut flash = cx.device.FLASH.constrain();
-        let mut rcc = cx.device.RCC.constrain();
-        let mut pwr = cx.device.PWR.constrain(&mut rcc.apb1r1);
+        let rcc = cx.device.RCC.constrain();
         let mut dcb = cx.core.DCB;
         let dwt = cx.core.DWT;
         let systick = cx.core.SYST;
@@ -29,7 +28,7 @@ mod app {
         //
         // Initialize the clocks
         //
-        let clocks = rcc.cfgr.sysclk(80.mhz()).freeze(&mut flash.acr, &mut pwr);
+        let clocks = rcc.cfgr.sysclk(8.mhz()).freeze(&mut flash.acr);
 
         // Setup the monotonic timer
         let mono2 = DwtSystick::new(&mut dcb, dwt, systick, clocks.sysclk().0);

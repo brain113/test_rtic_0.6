@@ -2,7 +2,7 @@
 # usb_vid = "1209"
 # usb_pid = "da42"
 protocol = "Swd"
-speed = 28000
+speed = 4600
 
 [default.flashing]
 enabled = true
@@ -12,7 +12,7 @@ enabled = true
 halt_afterwards = false
 
 [default.general]
-chip = "STM32L412CBUx"
+chip = "STM32F303VCTx"
 # chip_descriptions = ["./STM32L4 Series.yaml"]
 
 [default.rtt]
